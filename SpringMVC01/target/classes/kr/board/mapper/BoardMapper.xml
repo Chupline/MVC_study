@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--데이터베이스 연동
+	메소드가 실행될 떄 실행될 쿼리문 작성
+	
+	namespace = mapper가 여러개일 때 id등 동일할 수 있어서 중복을 허용할 수 있도록 패키지 경로 설정-->
+ 
+<mapper namespace="kr.board.mapper.BoardMapper">
+<!--
+	Mapper클래스의 메소드명을 실행하면 xml로 DB의 쿼리문을 수행하여 엔티티로 값을 반환
+	id = "Mapper클래스 메소드명"
+	resultType = "패키지명.java"로 반환
+-->
+	<select id="getLists" resultType="kr.board.entity.Board">
+		select * from board order by idx desc
+	</select>
+	
+</mapper>
