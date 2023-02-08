@@ -3,28 +3,39 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+
+	<!-- 6. 커넥션 풀 생성 -->
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
 	</context-param>
-	
+
+	<!-- 5. DB에 연동하기(context-param 읽기)위한 클래스 생성 -->
+	<!-- listener : 가장 먼저 생성되는 클래스 -->
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
 	</listener>
 
+
+
+	<!-- 1. Front Controller 생성 : DispatcherServlet -->
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+			<!-- 2. 프론트 컨트롤러에서 서블릿 컨테이너 호출 -->
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
+			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-		
+
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>

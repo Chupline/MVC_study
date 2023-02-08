@@ -32,6 +32,19 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<!-- JDBC -->
+		<dependency>
+
+<groupId>com.mysql</groupId>
+
+<artifactId>ojdbc6</artifactId>
+
+<version>11.2.0.3</version>
+
+<scope>compile</scope>
+
+</dependency>
 				
 		<!-- AspectJ -->
 		<dependency>

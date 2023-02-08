@@ -16,12 +16,16 @@
 	<resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+<!-- 뷰 리졸버 생성 -->
+<!-- bean : 객체 / prefix:접두사 / suffix:접미사 -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="prefix" value="/WEB-INF/views/" /> 
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="kr.board.controller" />
+	 
+<!-- 패키지를 scan해서 @Controller Class(POJO)를 각각의 객체로 생성 -->
+	<context:component-scan base-package="kr.board.controller" /> 
 	
 	
 	

@@ -31,8 +31,7 @@ public class BoardController {
 		list.add(vo);
 		list.add(vo);
 		
-		// 객체 바인딩 : controller가 가지고있는 데이터를 jsp로 
-		// forward해서 뷰페이지에 보여주기위해 메모리에 적재 -> 모델 객체 필요
+		// 객체 바인딩 : controller가 가지고있는 데이터를 jsp로 forward해서 뷰페이지에 보여주기위해 메모리에 적재 -> 모델 객체 필요
 		// list -> model -> jsp에서 request객체로 받는다.
 		
 		model.addAttribute("list", list);
