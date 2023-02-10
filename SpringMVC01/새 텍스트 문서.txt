@@ -32,16 +32,3 @@ root-context.xml
 9. mapper는 인터페이스로 이루어져 구현체를 가져야 하지만, API를 사용하면 내부적으로 구현체를 생성해서 SQL과 연결할 수 있다.
 	먼저 scan을 통해 패키지의 Mapper interface를 전부 메모리에 적재 
 	-> interface의 구현체를 생성하기 SQL을 실행하는 API(SqlSessionFactoryBean)를 작성
-
-
-
-
-
-
-
-스프링 컨테이너 : 매장
-프론트 컨트롤러 : 매니저
-각각 객체 : 알바생
-핸들러 매핑 : 각각 할 일 정보
-핸들러 어댑터 : 요청이 들어오면 할 수 있는 알바생 찾기
-boardList.do 요청 -> 매니저가 boardList를 가진 알바생을 찾아 업무를 지시 

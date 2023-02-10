@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
 import kr.board.entity.Board;
-
+ 
 @Mapper // Mybatis API
 public interface BoardMapper {
 	/* 같은 패키지안에 똑같은 이름으로 

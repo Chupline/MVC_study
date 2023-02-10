@@ -1,7 +1,7 @@
 package kr.board.entity;
 
 import lombok.Data;
-
+ 
 @Data // Lombok API
 public class Board {
 	private int idx; 		// 번호

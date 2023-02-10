@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.board.entity.Board;
 import kr.board.mapper.BoardMapper;
-
+ 
 @Controller
 //@Component (구시대의 산물)
 public class BoardController {
