@@ -60,7 +60,7 @@ public class BoardController {
 		return "boardContent"; // boardContent.jsp
 	}
 	
-	// 작성 글 삭제 get방식으로 넘김 방법2 : "?idx=" 변수 없이 서버에서 지정
+	// 작성 글 삭제 get방식으로 넘김 방법2 : "?idx="- 변수 없이 서버에서 지정
 	@GetMapping("/boardDelete.do/{idx}")
 	public String boardDelete(@PathVariable("idx") int idx) {
 		mapper.boardDelete(idx); //삭제
@@ -79,7 +79,7 @@ public class BoardController {
 	@PostMapping("/boardUpdate.do")
 	public String boardUpdate(Board vo) { // idx, title, content
 		mapper.boardUpdate(vo); //수정
-		return "redirect:/boardList .do";
+		return "redirect:/boardList.do";
 	}
 	
 }
