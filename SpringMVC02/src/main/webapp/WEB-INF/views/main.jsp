@@ -23,7 +23,8 @@
 	function loadList() {
 		// 서버와 통신: 게시판 리스트 가져오기
 		$.ajax({
-			url : "boardList.do", // 요청할 URL
+			/* RestController */
+			url : "board/all", // 기존 Controller : "boardList.do" // 요청할 URL
 			type : "get", // "post" or "get"
 			dataType : "json", // 서버에서 전송받을 데이터 형식
 			success : makeView, // 정상처리 : 응답된 데이터를 받아서 처리 -> 콜백함수
@@ -43,19 +44,19 @@
 		$.each(data, function(index, obj) {
 			listHtml += "<tr>";
 			listHtml += "<td>" + obj.idx + "</td>";
-			listHtml += "<td><a href='javascript:goContent("+obj.idx+")'>"+obj.title+"</a></td>";
+			listHtml += "<td id='t"+obj.idx+"'><a href='javascript:goContent("+obj.idx+")'>"+obj.title+"</a></td>";
 			listHtml += "<td>" + obj.writer + "</td>";
-			listHtml += "<td>" + obj.indate + "</td>";
-			listHtml += "<td>" + obj.count + "</td>";
+			listHtml += "<td>" + obj.indate.split(' ')[0] + "</td>";
+			listHtml += "<td id='cnt"+obj.idx+"'>" + obj.count + "</td>";
 			listHtml += "</tr>";
 			
 			// title을 클릭시 상세내용 보이기
 			listHtml += "<tr id='c"+obj.idx+"' style='display:none'>";
 			listHtml += "<td>내용</td>";
 			listHtml += "<td colspan='4'>";
-			listHtml += "<textarea readonly rows='7' class='form-control'>"+ obj.content + "</textarea>"
+			listHtml += "<textarea id='ta"+obj.idx+"' readonly rows='7' class='form-control'></textarea>"
 			listHtml += "<br>";
-			listHtml += "<botton class='btn btn-success btn-sm'>수정</botton>&nbsp;";
+			listHtml += "<span id='ub"+obj.idx+"'><botton class='btn btn-success btn-sm' onclick='goUpdateForm("+obj.idx+")'>수정</botton></span>&nbsp;";
 			listHtml += "<botton class='btn btn-warning btn-sm' onclick='goDelete("+obj.idx+")'>삭제</botton>";
 			listHtml += "</td>";
 			listHtml += "</tr>";
@@ -94,7 +95,8 @@
 		title=작성제목&content=작성내용&writer=작성자 <-같이 직렬화	  */
 		var fData=$("#frm").serialize(); 
 		$.ajax({
-			url : "boardInsert.do",
+			/* RestController */
+			url : "board/new", // 기존 Controller : "boardInsert.do",
 			type : "post",
 			data : fData,
 			success : loadList,
@@ -110,18 +112,68 @@
 	// title을 클릭시 상세내용 보이기
 	function goContent(idx) {
 		if($("#c"+idx).css("display") == "none"){
-			$("#c"+idx).css("display", "table-row"); //보이기
+			// 서버에서 상세보기 내용을 가져 오기
+			$.ajax({
+				url : "board/"+idx, //"boardContent.do",
+				type : "get",
+				data : {"idx" : idx},
+				dataType : "json",
+				success : function(data){
+					$("#ta"+idx).val(data.content);
+				},
+				error : function() {alert("error"); }
+			});
+			
+			$("#c"+idx).css("display", "table-row"); // 보이기
+			$("#ta"+idx).attr("readonly", true); // 글 수정 중 제목눌러서 닫고 다시 열 때 항상 readonly
 		} else {
-			$("#c"+idx).css("display","none"); //감추기
+			$("#c"+idx).css("display","none"); // 감추기
+			// 상세보기 닫을때 조회수++
+			$.ajax({
+				url : "board/count/"+idx,
+				type : "put",
+				data : {"idx":idx},
+				dataType : "json",
+				success : function(data) {
+					$("#cnt"+idx).text(data.count);
+				},
+				error : function() {alert("error");}
+			});
 		}
 	}
 	
 	// 상세내용에서 글 삭제
 	function goDelete(idx) {
 		$.ajax({
-			url : "boardDelete.do",
-			type : "get",
+			url : "board/"+idx, // "boardDelete.do",
+			type : "delete",
 			data : {"idx":idx},
+			success : loadList,
+			error : function() { alert("error"); }
+		});
+	}
+	
+	// 상세내용에서 글 수정형태
+	function goUpdateForm(idx) {
+		$("#ta"+idx).attr("readonly", false); // readonly 해제
+		var title = $("#t"+idx).text(); // 글 수정시 제목 수정도 가능하게하지만 제목은 사라져있지 않게 title값 남기기
+		var newInput = "<input type='text' id='nt"+idx+"' class='form-control' value='"+title+"'/>"; // 글 수정시 제목 수정도 가능하게 하지만 제목은 사라져있음
+		$("#t"+idx).html(newInput); // td와td사이에 태그삽입
+		// 버튼 색상 변경
+		var newBotton="<button class='btn btn-primary btn-sm' onclick='goUpdate("+idx+")'>수정</button>";
+		$("#ub"+idx).html(newBotton); 
+	}
+	
+	// 상세내용에서 글 수정제출
+	function goUpdate(idx) {
+		var title = $("#nt"+idx).val(); // 제목 새로 입력한 값
+		var content = $("#ta"+idx).val(); // 내용 새로 입력한 값
+		$.ajax({
+			url : "board/update", // "boardUpdate.do",
+			type : "put",
+			// JSON으로 변환, 타입 포맷 해서 전달한다.
+			contentType:'application/json;charset=utf-8',
+			data : JSON.stringify({"idx":idx, "title":title, "content":content}),
 			success : loadList,
 			error : function() { alert("error"); }
 		});

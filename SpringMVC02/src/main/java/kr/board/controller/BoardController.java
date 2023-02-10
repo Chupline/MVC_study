@@ -18,14 +18,17 @@ import kr.board.mapper.BoardMapper;
 @Controller
 public class BoardController {
 	
-	@Autowired
-	BoardMapper boardMapper;
+	/* 기존 컨트롤러는 클라이언트가 서버 요청을 하면 Ajax통신을해서 데이터를 내보낸다.
+	 * ex) @ResponseBody 등 */
+	
+//	@Autowired
+//	BoardMapper boardMapper;
 	
 	@RequestMapping("/")
 	public String main() {
 		return "main";
 	}
-	
+	/*
 	// @ResponseBody -> jackson-databind동작(객체를 JSON 데이터 포맷으로 변환)
 	@RequestMapping("/boardList.do")
 	public @ResponseBody List<Board> boardList() {
@@ -42,5 +45,25 @@ public class BoardController {
 	public @ResponseBody void boardDelete(@RequestParam("idx") int idx) {
 		boardMapper.boardDelete(idx);
 	}
+	
+	@RequestMapping("/boardUpdate.do")
+	public @ResponseBody void boardUpdate(Board vo) {
+		boardMapper.boardUpdate(vo);
+	}
+	
+	@RequestMapping("/boardContent.do")
+	public @ResponseBody Board boardContent(int idx) { //@RequestParam 생략 가능
+		Board vo = boardMapper.boardContent(idx);
+		return vo; // vo -> JSON
+	}
+	
+	@RequestMapping("/boardCount.do")
+	public @ResponseBody Board boardCount(int idx) {
+		boardMapper.boardCount(idx);
+		Board vo = boardMapper.boardContent(idx);
+		return vo;
+	}
+	*/
+	
 }
 
