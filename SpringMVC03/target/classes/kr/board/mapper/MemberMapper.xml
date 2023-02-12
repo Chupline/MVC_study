@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--데이터베이스 연동
+	메소드가 실행될 떄 실행될 쿼리문 작성
+	
+	namespace = mapper가 여러개일 때 id등 동일할 수 있어서 중복을 허용할 수 있도록 패키지 경로 설정-->
+ 
+<mapper namespace="kr.board.mapper.MemberMapper">
+    
+    <select id="registerIDCheck" resultType="kr.board.entity.Member">
+        select * from  mem_tbl 
+        where memID = #{memID}
+    </select>
+	
+    <insert id="register" parameterType="kr.board.entity.Member">
+        insert into mem_tbl(memID,memPassword,memName,memAge,memGender,memEmail,memProfile)
+        values (#{memID},#{memPassword},#{memName},#{memAge},#{memGender},#{memEmail},#{memProfile})
+    </insert>
+    
+    <select id="memLogin" parameterType="kr.board.entity.Member" resultType="kr.board.entity.Member">
+        select * from mem_tbl 
+        where memId=#{memID} and memPassword=#{memPassword} 
+    </select>
+    
+    <update id="memUpdate" parameterType="kr.board.entity.Member">
+        update mem_tbl
+        set memPassword=#{memPassword},memName=#{memName},memAge=#{memAge},
+            memGender=#{memGender},memEmail=#{memEmail}
+        where memID=#{memID}
+    </update>
+    
+    <select id="getMember" resultType="kr.board.entity.Member">
+        select * from mem_tbl where memID=#{memID}
+    </select>
+    
+    <update id="memProfileUpdate" parameterType="kr.board.entity.Member">
+        update mem_tbl
+        set memProfile=#{memProfile}
+        where memID=#{memID}
+    </update>
+    
+</mapper>

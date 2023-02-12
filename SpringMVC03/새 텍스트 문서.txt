@@ -1,0 +1,47 @@
+[WEB Layer]
+1. 톰캣 실행 -> web.xml을 읽는다.
+
+2. FrontController(DispatcherServlet) + Controller(POJO) loading
+	web.xml에서 FrontController(DispatcherServlet) 생성
+	FrontController에서 servlet-context(서블릿 컨테이너)를 참조
+	servlet-context의 context:component-scan는 패키지를 scan
+	-> @Controller가 있는 Class(POJO)를 각각 메모리에 객체로 생성
+
+3. HandlerMapping, HandlerAdapter Loading (@RequestMapping, @GetMapping, @PostMapping)
+	FrontController가 생성시 HandlerMapping이 핸들러 매핑정보(각각 controller의 어노테이션(메소드,정보))를 가지게 된다.
+	클라이언트에서 요청이 오면 (예: /boardList.do)
+	FrontController -> HandlerAdapter가 @RequestMapping("/boardList.do")의 객체 위치를 찾는다.
+	-> BoardController로 찾아가서 boardList()를 실행한다.
+	
+4. return 값은
+	① forward : "boardList" : 뷰가 jsp로 반환
+		method가 실행
+		-> 객체바인딩 : 값을 model에 저장 //HttpServletRequest = Model
+		-> return "boardList" 
+		-> 뷰리졸버를 통해 /WEB-INF/views/ViewName.jsp 를 클라이언트에 반환
+		-> 객체바인딩된 값은 jsp에서 el태그롤 통해 화면에 표시.
+	② redirect : "redirect/boardList.do" : 다시 프론트컨트롤러로
+	
+[Persistence Layer] //메모리 구조상 사실 WEB Layer쪽보다 먼저 수행되어야한다.
+web.xml 
+5. DB연결 객체를 만들기위해 ContextLoaderListener를 리스너를 통해 불러온다.
+6. DB연결 객체를 root-context.xml 경로를 통해 가져온다. 
+root-context.xml
+7. DB접속 정보를 가지고 있는 클래스를 API를 설정한다. -> hikariConfig
+8. Connection POOL을 만드는 역할을 하는 객체를 설정한다. -> dataSource
+9. mapper는 인터페이스로 이루어져 구현체를 가져야 하지만, API를 사용하면 내부적으로 구현체를 생성해서 SQL과 연결할 수 있다.
+	먼저 scan을 통해 패키지의 Mapper interface를 전부 메모리에 적재 
+	-> interface의 구현체를 생성하기 SQL을 실행하는 API(SqlSessionFactoryBean)를 작성
+
+
+
+
+
+
+
+스프링 컨테이너 : 매장
+프론트 컨트롤러 : 매니저
+각각 객체 : 알바생
+핸들러 매핑 : 각각 할 일 정보
+핸들러 어댑터 : 요청이 들어오면 할 수 있는 알바생 찾기
+boardList.do 요청 -> 매니저가 boardList를 가진 알바생을 찾아 업무를 지시 
